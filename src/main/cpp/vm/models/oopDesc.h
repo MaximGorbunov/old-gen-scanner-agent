@@ -63,10 +63,9 @@ public:
             }
         }
         printf("pointer: %lX %p", pKlass, addr);
-        printf("type: %s ", typeid(*(Klass*)pKlass).name());
-        if (dynamic_cast<InstanceMirrorKlass *>((Klass *) pKlass) != nullptr) {
+        if (metadata->symbolsParser->isType("InstanceMirrorKlass", *(uintptr_t*)pKlass)) {
             klass = std::make_shared<InstanceMirrorKlass>((char *) pKlass, typesContainer);
-        } else if (dynamic_cast<InstanceKlass *>((Klass *) pKlass) != nullptr) {
+        } else if (metadata->symbolsParser->isType("InstanceKlass", *(uintptr_t*)pKlass)) {
             klass = std::make_shared<InstanceKlass>((char *) pKlass, typesContainer);
         } else {
             klass = std::make_shared<Klass>((char *) pKlass, typesContainer);
@@ -77,8 +76,11 @@ public:
     }
 
     static inline int layout_helper_log2_element_size(int lh);
+
     static inline int layout_helper_header_size(int lh);
+
     int object_size();
+
     std::shared_ptr<Klass> getKlass();
 };
 

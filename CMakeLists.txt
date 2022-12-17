@@ -9,7 +9,7 @@ include_directories($ENV{JDK_DIR}/include/)
 include_directories(src/main/cpp)
 include_directories(src/main/cpp/vm)
 include_directories(src/main/cpp/vm/metadata)
-include_directories(src/main/cpp/vm/rtti)
+include_directories(src/main/cpp/vm/symbols)
 include_directories(src/main/cpp/vm/utilities)
 include_directories(src/main/cpp/vm/models)
 

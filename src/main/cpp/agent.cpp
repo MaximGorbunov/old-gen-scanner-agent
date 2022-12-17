@@ -2,24 +2,21 @@
 #include <jvmti.h>
 #include <memory>
 #include <thread>
+#include <vector>
 
 #include "vm/jvm.h"
+#include "symbolsParser.h"
 #include "vm/models/g1Heap.h"
-
 
 using namespace std;
 
-void task() {
-    std::this_thread::sleep_for(500ms);
-    shared_ptr<JVM> jvm(new JVM());
+void JNICALL VMStart(jvmtiEnv *jvmti_env, JNIEnv *jni_env) {
+    auto symbolsParser = make_shared<SymbolsParser>();
+    shared_ptr<JVM> jvm(new JVM(symbolsParser));
     shared_ptr<JvmTypesContainer> jvmTypesContainer(new JvmTypesContainer(jvm));
-    char *g1CollectedHeap = (char*) jvm->getG1CollectedHeap();
+    char *g1CollectedHeap = (char *) jvm->getG1CollectedHeap();
     G1Heap g1(g1CollectedHeap, jvmTypesContainer);
     g1.iterate(jvm, jvmTypesContainer);
-}
-
-void JNICALL VMStart(jvmtiEnv *jvmti_env, JNIEnv *jni_env) {
-    new std::thread(task);
 }
 
 extern jint JNICALL Agent_OnLoad(JavaVM * vm, char * options, void * reserved) {

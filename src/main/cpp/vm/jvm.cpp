@@ -78,7 +78,7 @@ shared_ptr<unordered_map<string, shared_ptr<Field>>> JVM::getTypeFields(const st
     return types[type].fields;
 }
 
-CollectedHeap *JVM::getG1CollectedHeap() {
+void *JVM::getG1CollectedHeap() {
     shared_ptr<unordered_map<string, shared_ptr<Field>>> fields = getTypeFields("Universe");
     shared_ptr<Field> _collectedHeapField;
     try {
@@ -88,10 +88,10 @@ CollectedHeap *JVM::getG1CollectedHeap() {
         throw err;
     }
 
-    auto *pCollectedHeap = *(CollectedHeap **) _collectedHeapField->offset;
-    bool isG1 = dynamic_cast<G1CollectedHeap*>(pCollectedHeap) != nullptr;
+    auto *pCollectedHeap = *(void **) _collectedHeapField->offset;
+    bool isG1 = (uintptr_t)symbolsParser->isType("G1CollectedHeap", *(uintptr_t*)pCollectedHeap);
     if (!isG1) {
-        printf("Not G1 GC, found: %s\n", typeid(*pCollectedHeap).name());
+        printf("Not G1 GC!\n");
         return nullptr;
     }
     return pCollectedHeap;
@@ -143,4 +143,8 @@ uint64_t JVM::getTypeSize(const std::string &name) {
         throw std::runtime_error("Can't find type for name " + name);
     }
     return typeIterator->second.size;
+}
+
+shared_ptr<SymbolsParser> JVM::getSymbolParser() {
+    return symbolsParser;
 }

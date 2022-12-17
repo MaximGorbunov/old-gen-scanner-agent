@@ -7,7 +7,7 @@ class ObjArrayKlass : public Klass {
 private:
     uint64_t lengthOffset;
 public:
-    ObjArrayKlass(const char *addr, uint64_t lengthOffset, const std::shared_ptr<JvmTypesContainer> &typesContainer)
+    ObjArrayKlass(char *addr, uint64_t lengthOffset, const std::shared_ptr<JvmTypesContainer> &typesContainer)
             : Klass(addr, typesContainer) {
         this->lengthOffset = lengthOffset;
     }

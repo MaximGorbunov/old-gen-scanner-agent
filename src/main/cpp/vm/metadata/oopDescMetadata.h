@@ -17,6 +17,7 @@ private:
     uint64_t arrayTypeSize;
     uint64_t klassGapOffset;
     int minObjAlignmentInBytes;
+    std::shared_ptr<SymbolsParser> symbolsParser;
 public:
     explicit OopDescMetadata(const std::shared_ptr<JVM> &jvm) {
         auto compressedOops = jvm->getTypeFields("CompressedKlassPointers");
@@ -30,6 +31,7 @@ public:
         klassField = jvm->getFieldByName(oopDesc, "_metadata._klass");
         klassGapOffset = (int) (klassField->offset + jvm->getTypeSize("narrowKlass"));
         minObjAlignmentInBytes = *(int *) jvm->getJVMFlagValue("ObjectAlignmentInBytes");
+        symbolsParser = jvm->getSymbolParser();
     }
 };
 

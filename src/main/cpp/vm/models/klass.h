@@ -30,7 +30,7 @@ public:
     }
 
     virtual int getObjectSize(char *addr) {
-        throw std::runtime_error(std::string("Get object size not implemented: ") + typeid(*(Klass*)klassAddr).name());
+        throw std::runtime_error("Get object size not implemented: ");
     };
 
     int getLayoutHelper();
