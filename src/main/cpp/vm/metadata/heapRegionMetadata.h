@@ -2,6 +2,7 @@
 #define HEAP_SCANNER_HEAPREGIONMETADATA_H
 
 #include <memory>
+#include <stdexcept>
 
 #include "jvmMetadata.h"
 #include "vmStructs.h"

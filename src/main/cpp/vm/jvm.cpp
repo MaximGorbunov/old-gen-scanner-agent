@@ -1,6 +1,7 @@
 #include "jvm.h"
 
 #include <memory>
+#include <stdexcept>
 #include "vmStructs.h"
 
 using namespace std;
@@ -111,7 +112,7 @@ shared_ptr<Field> JVM::getFieldByName(const shared_ptr<unordered_map<string, sha
     if (field != typeFieldsMap->end()) {
         return field->second;
     } else {
-        throw std::out_of_range("Field " + fieldName + " not found for type G1HeapRegionTable");
+        throw std::out_of_range("Field " + fieldName + " not found");
     }
 }
 

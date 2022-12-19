@@ -2,6 +2,7 @@
 #define HEAP_SCANNER_KLASSMETADATA_H
 
 #include <memory>
+#include <stdexcept>
 
 #include "jvmMetadata.h"
 #include "jvm.h"

@@ -1,5 +1,9 @@
 #include "symbol.h"
 
-char* Symbol::getBody() {
+std::string Symbol::getBody() {
     return body;
+}
+
+uint16_t Symbol::getLength() const {
+    return length;
 }

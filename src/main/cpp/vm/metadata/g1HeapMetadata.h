@@ -2,6 +2,7 @@
 #define HEAP_SCANNER_G11HEAPMETADATA_H
 
 #include <memory>
+#include <stdexcept>
 
 #include "vmStructs.h"
 #include "jvm.h"

@@ -2,6 +2,7 @@
 #define HEAP_SCANNER_HEAPREGIONTYPEMETADATA_H
 
 #include <cinttypes>
+#include <stdexcept>
 #include "jvm.h"
 #include "jvmMetadata.h"
 

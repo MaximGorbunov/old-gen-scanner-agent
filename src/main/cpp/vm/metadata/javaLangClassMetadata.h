@@ -1,6 +1,7 @@
 #ifndef HEAP_SCANNER_JAVALANGCLASSMETADATA_H
 #define HEAP_SCANNER_JAVALANGCLASSMETADATA_H
 
+#include <stdexcept>
 #include "jvmMetadata.h"
 #include "jvm.h"
 

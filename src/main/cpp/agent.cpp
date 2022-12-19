@@ -10,13 +10,17 @@
 
 using namespace std;
 
-void JNICALL VMStart(jvmtiEnv *jvmti_env, JNIEnv *jni_env) {
+void task() {
+    std::this_thread::sleep_for(2000ms);
     auto symbolsParser = make_shared<SymbolsParser>();
     shared_ptr<JVM> jvm(new JVM(symbolsParser));
     shared_ptr<JvmTypesContainer> jvmTypesContainer(new JvmTypesContainer(jvm));
     char *g1CollectedHeap = (char *) jvm->getG1CollectedHeap();
     G1Heap g1(g1CollectedHeap, jvmTypesContainer);
     g1.iterate(jvm, jvmTypesContainer);
+}
+void JNICALL VMStart(jvmtiEnv *jvmti_env, JNIEnv *jni_env) {
+    new thread(task);
 }
 
 extern jint JNICALL Agent_OnLoad(JavaVM * vm, char * options, void * reserved) {

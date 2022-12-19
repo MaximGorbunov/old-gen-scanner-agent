@@ -9,7 +9,7 @@
 #define LINKEDIT_SEGMENT "__LINKEDIT"
 #define TEXT_SEGMENT "__TEXT"
 #define JVM_LIB_NAME "libjvm"
-#define VIRTUAL_FUNCTION_POINTERS_OFFSET 16
+#define VIRTUAL_FUNCTION_POINTERS_OFFSET 0x10
 #define TYPE_PREFIX  "__ZTV"
 
 using namespace std;
@@ -44,8 +44,7 @@ SymbolsParser::SymbolsParser() {
                         nlist_64 &nlist64 = nlist[sym];
                         if ((strTable + nlist64.n_un.n_strx) != nullptr && nlist64.n_value != 0) {
                             typeVtblMap->insert({string((char *) (strTable + nlist64.n_un.n_strx)),
-                                                 (uintptr_t) textSegment + nlist64.n_value +
-                                                 VIRTUAL_FUNCTION_POINTERS_OFFSET});
+                                                 (uintptr_t) textSegment + nlist64.n_value});
                         }
                     }
                 }
@@ -65,7 +64,7 @@ bool SymbolsParser::isType(const std::string &type, uintptr_t pointer)  {
     } else {
         vtbl = vtblIterator->second;
     }
-    return pointer == vtbl;
+    return pointer == (vtbl  + VIRTUAL_FUNCTION_POINTERS_OFFSET);
 }
 
 #endif

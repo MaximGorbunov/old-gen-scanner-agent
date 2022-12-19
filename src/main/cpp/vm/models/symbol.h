@@ -2,6 +2,7 @@
 #define HEAP_SCANNER_SYMBOL_H
 
 #include <iostream>
+#include <cstring>
 
 #include "jvmTypesContainer.h"
 #include "jni.h"
@@ -9,7 +10,7 @@
 
 class Symbol {
 private:
-    char* body;
+    std::string body;
     uint16_t length;
 public:
     Symbol(const char *addr, const std::shared_ptr<JvmTypesContainer> &typesContainer) {
@@ -20,13 +21,20 @@ public:
             length = *(uint16_t*)(addr+metadata->length->offset);
         }
         if (metadata->body->isStatic) {
-            body = (char*) metadata->body->offset;
+            char copy[length + 1];
+            copy[length] = 0;
+            memcpy(copy, (char*) metadata->body->offset, length);
+            body = std::string(copy);
         } else {
-            body = (char*)(addr + metadata->body->offset);
+            char copy[length + 1];
+            copy[length] = 0;
+            memcpy(copy, (char*)(addr + metadata->body->offset), length);
+            body = std::string(copy);
         }
     }
 
-    char* getBody();
+    std::string getBody();
+    uint16_t getLength() const;
 };
 
 

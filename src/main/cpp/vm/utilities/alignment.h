@@ -3,7 +3,7 @@
 
 #include <cstdio>
 
-static inline int alignment_mask(int alignment) {
+constexpr static inline int alignment_mask(int alignment) {
     return alignment - 1;
 }
 

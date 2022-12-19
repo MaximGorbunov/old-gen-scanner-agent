@@ -1,6 +1,7 @@
 #ifndef HEAP_SCANNER_G1HEAPREGIONTABLEMETADATA_H
 #define HEAP_SCANNER_G1HEAPREGIONTABLEMETADATA_H
 
+#include <stdexcept>
 #include "jvm.h"
 #include "jvmMetadata.h"
 #include "vmStructs.h"

@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
+#include <functional>
 
 #include "jvm.h"
 #include "metadata/jvmMetadata.h"
