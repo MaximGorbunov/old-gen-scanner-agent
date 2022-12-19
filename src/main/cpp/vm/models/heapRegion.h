@@ -50,6 +50,9 @@ public:
     uintptr_t getEnd();
 
     uintptr_t getTop();
+
+    bool isHumongous();
+    bool isContinueHumongous();
 };
 
 

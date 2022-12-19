@@ -13,19 +13,21 @@
 class HeapRegionType {
 private:
     uint32_t tag;
-//    std::shared_ptr<HeapRegionTypeMetadata> metadata;
+    std::shared_ptr<HeapRegionTypeMetadata> metadata;
 public:
 
     HeapRegionType(const char *addr, const std::shared_ptr<JvmTypesContainer> &typesContainer) {
-        auto metadata = std::static_pointer_cast<HeapRegionTypeMetadata>(typesContainer->getMetadata("HeapRegionType"));
+        metadata = std::static_pointer_cast<HeapRegionTypeMetadata>(typesContainer->getMetadata("HeapRegionType"));
         if (metadata->tagField->isStatic) {
             tag = *(uint32_t *) metadata->tagField->offset;
         } else {
-            tag = *(uint32_t *) addr + metadata->tagField->offset;
+            tag = *(uint32_t *)(addr + metadata->tagField->offset);
         }
     }
 
     bool isOld();
+    bool isHumongous();
+    bool isContinueHumongous();
 };
 
 

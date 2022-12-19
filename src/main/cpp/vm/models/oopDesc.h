@@ -28,7 +28,7 @@ public:
         } else {
             mark = *(int *) (addr + metadata->markField->offset);
         }
-        uintptr_t pKlass;
+        uintptr_t pKlass = 0;
         if (compressedClassPointers) {
 
             uintptr_t oopBase;
@@ -36,7 +36,6 @@ public:
                 oopBase = *(std::uintptr_t *) metadata->oopBaseField->offset;
             } else {
                 oopBase = *(std::uintptr_t *) (addr + metadata->oopBaseField->offset);
-                printf("OopBase: %lu \n", oopBase);
             }
 
             uint32_t oopShift;
@@ -52,9 +51,9 @@ public:
             } else {
                 compressedKlass = *(uint32_t *) (addr + metadata->compressedKlassField->offset);
             }
-            printf("oopBase: %lX", oopBase);
-            printf("comp: %llX", compressedKlass);
-            pKlass = oopBase + (long) (compressedKlass << oopShift);
+            if (compressedKlass != 0) {
+                pKlass = oopBase + (long) (compressedKlass << oopShift);
+            }
         } else {
             if (metadata->klassField->isStatic) {
                 pKlass = *(uintptr_t *) metadata->klassField->offset;
@@ -62,17 +61,20 @@ public:
                 pKlass = *(uintptr_t *) addr + metadata->klassField->offset;
             }
         }
-        printf("pointer: %lX %p", pKlass, addr);
-        if (metadata->symbolsParser->isType("InstanceMirrorKlass", *(uintptr_t*)pKlass)) {
-            klass = std::make_shared<InstanceMirrorKlass>((char *) pKlass, typesContainer);
-        } else if (metadata->symbolsParser->isType("InstanceKlass", *(uintptr_t*)pKlass)) {
-            klass = std::make_shared<InstanceKlass>((char *) pKlass, typesContainer);
+        if (pKlass == 0) {
+            throw std::runtime_error("Unknown klass");
         } else {
-            klass = std::make_shared<Klass>((char *) pKlass, typesContainer);
+            if (metadata->symbolsParser->isType("InstanceMirrorKlass", *(uintptr_t *) pKlass)) {
+                klass = std::make_shared<InstanceMirrorKlass>((char *) pKlass, typesContainer);
+            } else if (metadata->symbolsParser->isType("InstanceKlass", *(uintptr_t *) pKlass)) {
+                klass = std::make_shared<InstanceKlass>((char *) pKlass, typesContainer);
+            } else {
+                klass = std::make_shared<Klass>((char *) pKlass, typesContainer);
+            }
+            arrayTypeSize = metadata->arrayTypeSize;
+            klassGapOffset = metadata->klassGapOffset;
+            minObjAlignmentInBytes = metadata->minObjAlignmentInBytes;
         }
-        arrayTypeSize = metadata->arrayTypeSize;
-        klassGapOffset = metadata->klassGapOffset;
-        minObjAlignmentInBytes = metadata->minObjAlignmentInBytes;
     }
 
     static inline int layout_helper_log2_element_size(int lh);

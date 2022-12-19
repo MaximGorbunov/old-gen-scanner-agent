@@ -1,7 +1,6 @@
 #include <jni.h>
 #include <jvmti.h>
 #include <memory>
-#include <thread>
 #include <vector>
 
 #include "vm/jvm.h"
@@ -10,8 +9,7 @@
 
 using namespace std;
 
-void task() {
-    std::this_thread::sleep_for(2000ms);
+void JNICALL GarbageCollectionFinish(jvmtiEnv *jvmti_env) {
     auto symbolsParser = make_shared<SymbolsParser>();
     shared_ptr<JVM> jvm(new JVM(symbolsParser));
     shared_ptr<JvmTypesContainer> jvmTypesContainer(new JvmTypesContainer(jvm));
@@ -19,16 +17,16 @@ void task() {
     G1Heap g1(g1CollectedHeap, jvmTypesContainer);
     g1.iterate(jvm, jvmTypesContainer);
 }
-void JNICALL VMStart(jvmtiEnv *jvmti_env, JNIEnv *jni_env) {
-    new thread(task);
-}
 
 extern jint JNICALL Agent_OnLoad(JavaVM * vm, char * options, void * reserved) {
     jvmtiEnv *jvmti_env;
+    jvmtiCapabilities capabilities{};
+    capabilities.can_generate_garbage_collection_events = true;
     vm->GetEnv((void **) &jvmti_env, JVMTI_VERSION_11);
     jvmtiEventCallbacks callbacks = {nullptr};
-    callbacks.VMStart = VMStart;
+    callbacks.GarbageCollectionFinish = GarbageCollectionFinish;
     jvmti_env->SetEventCallbacks(&callbacks, sizeof(callbacks));
-    jvmti_env->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_VM_START, nullptr);
+    jvmti_env->AddCapabilities(&capabilities);
+    jvmti_env->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_GARBAGE_COLLECTION_FINISH, nullptr);
     return 0;
 }

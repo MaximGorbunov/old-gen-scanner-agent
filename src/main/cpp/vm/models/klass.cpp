@@ -6,5 +6,5 @@ int Klass::getLayoutHelper() {
 }
 
 void Klass::printName() {
-    printf("Class name: '%s' \n", name->getBody().c_str());
+    printf("Class name: '%s' ", name->getBody().c_str());
 }

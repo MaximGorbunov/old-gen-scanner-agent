@@ -38,13 +38,11 @@ static int libCallback(struct dl_phdr_info *info, size_t size, void *data) {
                     for (int index = 0; index < header->e_shnum; index++) {
                         if (headers[index].sh_type == SHT_STRTAB &&
                             strcmp(".strtab", &shstrtab[headers[index].sh_name]) == 0) {
-                            printf("Type %s", &shstrtab[headers[index].sh_name]);
                             strtab = (char *) malloc(sizeof(char) * headers[index].sh_size);
                             fseek(fd, (long) headers[index].sh_offset, SEEK_SET);
                             fread(strtab, 1, headers[index].sh_size, fd);
                         }
                         if (headers[index].sh_type == SHT_SYMTAB) {
-                            printf("Addr loaded %p : %lX\n", &headers, headers[index].sh_offset);
                             symtab = (Elf64_Sym *) malloc(headers[index].sh_size);
                             symbolsCount = headers[index].sh_size / headers[index].sh_entsize;
                             fseek(fd, (long) headers[index].sh_offset, SEEK_SET);
