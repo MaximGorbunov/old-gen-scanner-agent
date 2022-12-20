@@ -18,7 +18,7 @@ private:
 public:
     JvmTypesContainer(std::shared_ptr<JVM> jvm);
 
-    std::shared_ptr<JvmMetadata> getMetadata(const std::string& name);
+    std::shared_ptr<JvmMetadata> getMetadata(const std::string &name);
 };
 
 

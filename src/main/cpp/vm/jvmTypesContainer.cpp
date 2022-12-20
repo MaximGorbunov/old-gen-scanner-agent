@@ -44,7 +44,7 @@ JvmTypesContainer::JvmTypesContainer(std::shared_ptr<JVM> jvm) {
     };
 }
 
-std::shared_ptr<JvmMetadata> JvmTypesContainer::getMetadata(const std::string& name) {
+std::shared_ptr<JvmMetadata> JvmTypesContainer::getMetadata(const std::string &name) {
     auto search = typeMetadataMap.find(name);
     std::shared_ptr<JvmMetadata> metadata;
     if (search == typeMetadataMap.end()) {

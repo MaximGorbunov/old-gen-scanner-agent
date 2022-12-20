@@ -8,6 +8,7 @@
 class JavaLangClassMetadata : public JvmMetadata {
 private:
     friend class InstanceMirrorKlass;
+
     std::shared_ptr<Field> klassOffset;
     std::shared_ptr<Field> arrayKlassOffset;
     std::shared_ptr<Field> oopSizeOffset;

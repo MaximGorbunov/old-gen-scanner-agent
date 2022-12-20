@@ -2,7 +2,18 @@ cmake_minimum_required(VERSION 3.10)
 project(heap-scanner)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+add_compile_options(
+        "-Wall" "-Wpedantic" "-Wextra" "-fexceptions" "-Wno-unused-parameter"
+        "$<$<CONFIG:DEBUG>:-fsanitize=address>"
+)
+
+add_link_options(
+        "$<$<CONFIG:DEBUG>:-fsanitize=address>"
+)
+
 
 string(TOLOWER ${CMAKE_SYSTEM_NAME} OS)
 include_directories($ENV{JDK_DIR}/include/${OS}/)

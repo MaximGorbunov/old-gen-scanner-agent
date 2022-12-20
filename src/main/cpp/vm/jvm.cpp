@@ -90,7 +90,7 @@ void *JVM::getG1CollectedHeap() {
     }
 
     auto *pCollectedHeap = *(void **) _collectedHeapField->offset;
-    bool isG1 = (uintptr_t)symbolsParser->isType("G1CollectedHeap", *(uintptr_t*)pCollectedHeap);
+    bool isG1 = (uintptr_t) symbolsParser->isType("G1CollectedHeap", *(uintptr_t *) pCollectedHeap);
     if (!isG1) {
         printf("Not G1 GC!\n");
         return nullptr;
@@ -125,7 +125,7 @@ void JVM::resolveJVMFlags() {
     auto addrField = getFieldByName(jvmFlagFields, "_addr");
     size_t numFlags = *(size_t *) numFlagsField->offset;
     char **flags = (char **) flagsField->offset;
-    for (int i = 0; i < numFlags - 1; i++) {//last row contains null values
+    for (unsigned long i = 0; i < numFlags - 1; i++) {//last row contains null values
         string name = string(*(char **) (*flags + jvmFlagType.size * i + nameField->offset));
         char *addr = *(char **) (*flags + jvmFlagType.size * i + addrField->offset);
         jvmFlags[name] = addr;

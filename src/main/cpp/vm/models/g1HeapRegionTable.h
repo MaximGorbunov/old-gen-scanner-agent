@@ -44,9 +44,9 @@ public:
         }
     }
 
-    HeapRegion *getHeapRegionByAddress(const char *addr, const std::shared_ptr<JvmTypesContainer>& typesContainer);
+    HeapRegion *getHeapRegionByAddress(const char *addr, const std::shared_ptr<JvmTypesContainer> &typesContainer);
 
-    HeapRegion *getHeapRegionByIndex(size_t index, const std::shared_ptr<JvmTypesContainer>& typesContainer);
+    HeapRegion *getHeapRegionByIndex(size_t index, const std::shared_ptr<JvmTypesContainer> &typesContainer);
 
     void verifyBiasedIndex(size_t index);
 

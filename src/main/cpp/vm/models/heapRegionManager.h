@@ -10,12 +10,13 @@ class HeapRegionManager {
 private:
     G1HeapRegionTable *regions;
 public:
-    explicit HeapRegionManager(const char *addr, const std::shared_ptr<JvmTypesContainer>& typesContainer) {
-        auto metadata = std::static_pointer_cast<HeapRegionManagerMetadata>(typesContainer->getMetadata("HeapRegionManager"));
+    explicit HeapRegionManager(const char *addr, const std::shared_ptr<JvmTypesContainer> &typesContainer) {
+        auto metadata = std::static_pointer_cast<HeapRegionManagerMetadata>(
+                typesContainer->getMetadata("HeapRegionManager"));
         if (metadata->regionsField->isStatic) {
             regions = new G1HeapRegionTable((char *) metadata->regionsField->offset, typesContainer);
         } else {
-            regions = new G1HeapRegionTable((char*)(addr + metadata->regionsField->offset), typesContainer);
+            regions = new G1HeapRegionTable((char *) (addr + metadata->regionsField->offset), typesContainer);
         }
     }
 

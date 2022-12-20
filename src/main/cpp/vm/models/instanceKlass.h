@@ -9,6 +9,8 @@ public:
             : Klass(addr, typesContainer) {
     }
 
+    ~InstanceKlass() override = default;
+
     int getObjectSize(char *addr) override;
 };
 

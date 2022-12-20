@@ -21,12 +21,14 @@ public:
         if (metadata->tagField->isStatic) {
             tag = *(uint32_t *) metadata->tagField->offset;
         } else {
-            tag = *(uint32_t *)(addr + metadata->tagField->offset);
+            tag = *(uint32_t *) (addr + metadata->tagField->offset);
         }
     }
 
     bool isOld();
+
     bool isHumongous();
+
     bool isContinueHumongous();
 };
 

@@ -52,6 +52,7 @@ public:
     uintptr_t getTop();
 
     bool isHumongous();
+
     bool isContinueHumongous();
 };
 

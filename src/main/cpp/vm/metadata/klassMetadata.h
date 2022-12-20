@@ -7,13 +7,14 @@
 #include "jvmMetadata.h"
 #include "jvm.h"
 
-class KlassMetadata: public JvmMetadata {
+class KlassMetadata : public JvmMetadata {
 private:
     friend class Klass;
+
     std::shared_ptr<Field> name;
     std::shared_ptr<Field> layoutHelper;
 public:
-    KlassMetadata(const std::shared_ptr<JVM> &jvm) {
+    explicit KlassMetadata(const std::shared_ptr<JVM> &jvm) {
         auto klassFields = jvm->getTypeFields("Klass");
         auto nameIterator = klassFields->find("_name");
         if (nameIterator == klassFields->end()) {

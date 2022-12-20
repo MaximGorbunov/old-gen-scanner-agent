@@ -49,6 +49,7 @@ public:
     uint64_t getTypeSize(const std::string &name);
 
     std::shared_ptr<SymbolsParser> getSymbolParser();
+
 private:
     std::unordered_map<std::string, std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<Field>>>> vmStructs;
     std::unordered_map<std::string, VMTypeEntry> types;

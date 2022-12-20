@@ -29,6 +29,8 @@ public:
         klassAddr = addr;
     }
 
+    virtual ~Klass() = default;
+
     virtual int getObjectSize(char *addr) {
         throw std::runtime_error("Get object size not implemented: ");
     };

@@ -16,24 +16,19 @@ public:
     Symbol(const char *addr, const std::shared_ptr<JvmTypesContainer> &typesContainer) {
         auto metadata = std::static_pointer_cast<SymbolMetadata>(typesContainer->getMetadata("Symbol"));
         if (metadata->length->isStatic) {
-            length = *(uint16_t*) metadata->length->offset;
+            length = *(uint16_t *) metadata->length->offset;
         } else {
-            length = *(uint16_t*)(addr+metadata->length->offset);
+            length = *(uint16_t *) (addr + metadata->length->offset);
         }
         if (metadata->body->isStatic) {
-            char copy[length + 1];
-            copy[length] = 0;
-            memcpy(copy, (char*) metadata->body->offset, length);
-            body = std::string(copy);
+            body = std::string((char *) metadata->body->offset, (char *) metadata->body->offset + length);
         } else {
-            char copy[length + 1];
-            copy[length] = 0;
-            memcpy(copy, (char*)(addr + metadata->body->offset), length);
-            body = std::string(copy);
+            body = std::string((char *) metadata->body->offset, (char *) (addr + metadata->body->offset + length));
         }
     }
 
     std::string getBody();
+
     uint16_t getLength() const;
 };
 

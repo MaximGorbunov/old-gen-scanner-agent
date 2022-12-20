@@ -17,7 +17,7 @@ using namespace std;
 SymbolsParser::SymbolsParser() {
     this->typeVtblMap = make_shared<unordered_map<string, uintptr_t>>();
     uint32_t imagesCount = _dyld_image_count();
-    for (int imageIndex = 0; imageIndex < imagesCount; imageIndex++) {
+    for (uint32_t imageIndex = 0; imageIndex < imagesCount; imageIndex++) {
         const auto imageName = std::string(_dyld_get_image_name(imageIndex));
         if (imageName.find(JVM_LIB_NAME) != std::string::npos) {
             const mach_header_64 *pHeader = (mach_header_64 *) _dyld_get_image_header(imageIndex);
@@ -26,7 +26,7 @@ SymbolsParser::SymbolsParser() {
             auto *loadCommand = (load_command *) (pHeader + 1);
             char *linkeditSegment;
             char *textSegment;
-            for (int j = 0; j < loadCommandCount; j++) {
+            for (uint32_t j = 0; j < loadCommandCount; j++) {
                 if (loadCommand->cmd == LC_SEGMENT_64) {
                     auto com = (segment_command_64 *) loadCommand;
                     if (strcmp(LINKEDIT_SEGMENT, com->segname) == 0) {
@@ -40,7 +40,7 @@ SymbolsParser::SymbolsParser() {
                     auto *com = (symtab_command *) loadCommand;
                     auto nlist = (nlist_64 *) (linkeditSegment + com->symoff);
                     auto strTable = (char *) linkeditSegment + com->stroff;
-                    for (int sym = 0; sym < com->nsyms; sym++) {
+                    for (uint32_t sym = 0; sym < com->nsyms; sym++) {
                         nlist_64 &nlist64 = nlist[sym];
                         if ((strTable + nlist64.n_un.n_strx) != nullptr && nlist64.n_value != 0) {
                             typeVtblMap->insert({string((char *) (strTable + nlist64.n_un.n_strx)),
@@ -55,7 +55,7 @@ SymbolsParser::SymbolsParser() {
 }
 
 
-bool SymbolsParser::isType(const std::string &type, uintptr_t pointer)  {
+bool SymbolsParser::isType(const std::string &type, uintptr_t pointer) {
     std::string mangledType = TYPE_PREFIX + to_string(type.size()) + type;
     auto vtblIterator = typeVtblMap->find(mangledType);
     uintptr_t vtbl;
@@ -64,7 +64,7 @@ bool SymbolsParser::isType(const std::string &type, uintptr_t pointer)  {
     } else {
         vtbl = vtblIterator->second;
     }
-    return pointer == (vtbl  + VIRTUAL_FUNCTION_POINTERS_OFFSET);
+    return pointer == (vtbl + VIRTUAL_FUNCTION_POINTERS_OFFSET);
 }
 
 #endif
